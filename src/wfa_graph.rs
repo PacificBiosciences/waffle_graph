@@ -151,7 +151,7 @@ impl WFAGraph {
 
             // look at where this variant is
             let variant_pos: usize = variant.position() as usize;
-            let ref_len: usize = variant.get_ref_len();
+            let ref_len: usize = variant.ref_len();
             if variant_pos < ref_start {
                 // this variant starts before our reference block, so ignore it
                 trace!("Ignoring variant starting at {} before ref_start {}", variant_pos, ref_start);

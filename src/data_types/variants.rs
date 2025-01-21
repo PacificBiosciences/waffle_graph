@@ -537,11 +537,11 @@ impl Variant {
         self.postfix_len -= truncate_amount;
     }
 
-    pub fn get_vcf_index(&self) -> usize {
+    pub fn vcf_index(&self) -> usize {
         self.vcf_index
     }
 
-    pub fn get_type(&self) -> VariantType {
+    pub fn variant_type(&self) -> VariantType {
         self.variant_type
     }
 
@@ -549,23 +549,23 @@ impl Variant {
         self.position
     }
 
-    pub fn get_ref_len(&self) -> usize {
+    pub fn ref_len(&self) -> usize {
         self.ref_len
     }
 
-    pub fn get_prefix_len(&self) -> usize {
+    pub fn prefix_len(&self) -> usize {
         self.prefix_len
     }
 
-    pub fn get_postfix_len(&self) -> usize {
+    pub fn postfix_len(&self) -> usize {
         self.postfix_len
     }
 
-    pub fn get_allele0(&self) -> &[u8] {
+    pub fn allele0(&self) -> &[u8] {
         &self.allele0
     }
 
-    pub fn get_allele1(&self) -> &[u8] {
+    pub fn allele1(&self) -> &[u8] {
         &self.allele1
     }
 
@@ -670,9 +670,9 @@ mod tests {
             b"A".to_vec(), b"C".to_vec(),
             0, 1
         ).unwrap();
-        assert_eq!(variant.get_type(), VariantType::Snv);
+        assert_eq!(variant.variant_type(), VariantType::Snv);
         assert_eq!(variant.position(), 1);
-        assert_eq!(variant.get_ref_len(), 1);
+        assert_eq!(variant.ref_len(), 1);
         assert_eq!(variant.match_allele(b"A"), 0);
         assert_eq!(variant.match_allele(b"C"), 1);
         assert_eq!(variant.match_allele(b"G"), 2);
@@ -690,9 +690,9 @@ mod tests {
             b"AGT".to_vec(), b"A".to_vec(),
             0, 1
         ).unwrap();
-        assert_eq!(variant.get_type(), VariantType::Deletion);
+        assert_eq!(variant.variant_type(), VariantType::Deletion);
         assert_eq!(variant.position(), 10);
-        assert_eq!(variant.get_ref_len(), 3);
+        assert_eq!(variant.ref_len(), 3);
         assert_eq!(variant.match_allele(b"AGT"), 0);
         assert_eq!(variant.match_allele(b"A"), 1);
         assert_eq!(variant.match_allele(b"AG"), 2);
@@ -703,9 +703,9 @@ mod tests {
             b"C".to_vec(), b"A".to_vec(),
             1, 2
         ).unwrap();
-        assert_eq!(variant.get_type(), VariantType::Deletion);
+        assert_eq!(variant.variant_type(), VariantType::Deletion);
         assert_eq!(variant.position(), 10);
-        assert_eq!(variant.get_ref_len(), 4);
+        assert_eq!(variant.ref_len(), 4);
         assert_eq!(variant.match_allele(b"ACCC"), 2);
         assert_eq!(variant.match_allele(b"C"), 0);
         assert_eq!(variant.match_allele(b"A"), 1);
@@ -720,9 +720,9 @@ mod tests {
             b"A".to_vec(), b"AGT".to_vec(),
             0, 1
         ).unwrap();
-        assert_eq!(variant.get_type(), VariantType::Insertion);
+        assert_eq!(variant.variant_type(), VariantType::Insertion);
         assert_eq!(variant.position(), 20);
-        assert_eq!(variant.get_ref_len(), 1);
+        assert_eq!(variant.ref_len(), 1);
         assert_eq!(variant.match_allele(b"A"), 0);
         assert_eq!(variant.match_allele(b"AGT"), 1);
         assert_eq!(variant.match_allele(b"AG"), 2);
@@ -736,9 +736,9 @@ mod tests {
             b"A".to_vec(), b"AGT".to_vec(),
             1, 2
         ).unwrap();
-        assert_eq!(variant.get_type(), VariantType::Indel);
+        assert_eq!(variant.variant_type(), VariantType::Indel);
         assert_eq!(variant.position(), 20);
-        assert_eq!(variant.get_ref_len(), 2);
+        assert_eq!(variant.ref_len(), 2);
         assert_eq!(variant.match_allele(b"A"), 0);
         assert_eq!(variant.match_allele(b"AGT"), 1);
         assert_eq!(variant.match_allele(b"AG"), 2);
@@ -751,9 +751,9 @@ mod tests {
             b"A".to_vec(), b"AGT".to_vec(),
             0, 1
         ).unwrap();
-        assert_eq!(variant.get_type(), VariantType::SvInsertion);
+        assert_eq!(variant.variant_type(), VariantType::SvInsertion);
         assert_eq!(variant.position(), 20);
-        assert_eq!(variant.get_ref_len(), 1);
+        assert_eq!(variant.ref_len(), 1);
 
         // TODO: replace this with the matching we will do with SVs
         assert_eq!(variant.match_allele(b"A"), 0);
@@ -768,9 +768,9 @@ mod tests {
             b"AGT".to_vec(), b"A".to_vec(),
             0, 1
         ).unwrap();
-        assert_eq!(variant.get_type(), VariantType::SvDeletion);
+        assert_eq!(variant.variant_type(), VariantType::SvDeletion);
         assert_eq!(variant.position(), 10);
-        assert_eq!(variant.get_ref_len(), 3);
+        assert_eq!(variant.ref_len(), 3);
 
         // TODO: replace this with the matching we will do with SVs
         assert_eq!(variant.match_allele(b"AGT"), 0);
@@ -786,9 +786,9 @@ mod tests {
             b"AAACAAAC".to_vec(),
             0, 1
         ).unwrap();
-        assert_eq!(variant.get_type(), VariantType::TandemRepeat);
+        assert_eq!(variant.variant_type(), VariantType::TandemRepeat);
         assert_eq!(variant.position(), 10);
-        assert_eq!(variant.get_ref_len(), 4);
+        assert_eq!(variant.ref_len(), 4);
 
         assert_eq!(variant.match_allele(b"AAAC"), 0);
         assert_eq!(variant.match_allele(b"AAACAAAC"), 1);
@@ -805,8 +805,8 @@ mod tests {
         ).unwrap();
 
         // make sure no fixins yet
-        assert_eq!(variant.get_prefix_len(), 0);
-        assert_eq!(variant.get_postfix_len(), 0);
+        assert_eq!(variant.prefix_len(), 0);
+        assert_eq!(variant.postfix_len(), 0);
         
         let prefix: Vec<u8> = b"AC".to_vec();
         variant.add_reference_prefix(&prefix);
@@ -820,13 +820,13 @@ mod tests {
         variant.truncate_reference_postfix(1);
         
         // make sure nothing here changes
-        assert_eq!(variant.get_type(), VariantType::Indel);
+        assert_eq!(variant.variant_type(), VariantType::Indel);
         assert_eq!(variant.position(), 20);
-        assert_eq!(variant.get_ref_len(), 2);
+        assert_eq!(variant.ref_len(), 2);
 
         // check this new stuff
-        assert_eq!(variant.get_prefix_len(), 2);
-        assert_eq!(variant.get_postfix_len(), 3);
+        assert_eq!(variant.prefix_len(), 2);
+        assert_eq!(variant.postfix_len(), 3);
 
         // original alleles will not match exactly anymore
         assert_eq!(variant.match_allele(b"A"), 2);
