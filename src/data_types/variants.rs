@@ -64,7 +64,7 @@ pub enum VariantError {
 /// It currently assumes that chromosome is fixed and that the variant is a SNP.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Variant {
-    /// The vcf index from the input datasets
+    /// The vcf index from the input datasets, use 0 if unneeded
     vcf_index: usize,
     /// The type of variant represented by this entry
     variant_type: VariantType,
@@ -72,9 +72,9 @@ pub struct Variant {
     position: i64,
     /// The length of the reference allele
     ref_len: usize,
-    /// the start position of the allele (0-based), will be <= position
+    /// the length of additional sequence stored before the core alleles
     prefix_len: usize,
-    /// the end position (0-based, exclusive), will be >= position+ref_len
+    /// the length of additional sequence stored after the core alleles
     postfix_len: usize,
     /// the first allele value
     allele0: Vec<u8>,
@@ -88,7 +88,7 @@ pub struct Variant {
     index_allele1: u8,
 
     // auxiliary booleans
-    /// if true, flags this is a variant to ignore for _some_ reason
+    /// if true, flags this as a variant to ignore for _some_ reason
     is_ignored: bool
 }
 
